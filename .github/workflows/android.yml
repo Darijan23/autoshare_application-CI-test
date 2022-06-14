@@ -22,7 +22,21 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+    - name: Populate local.properties
+      env:
+        WEATHERAPIKEY: ${{ secrets.WEATHER_API_KEY }}
+        MAPSAPIKEY: ${{ secrets.MAPS_API_KEY }}
+        AUTOSHAREAPI: ${{ secrets.AUTOSHARE_API }}
+    - run: echo WEATHER_API_KEY="$WEATHERAPIKEY" > ./local.properties
+    - run: echo MAPS_API_KEY="$MAPSAPIKEY" >> ./local.properties
+    - run: echo AUTOSHARE_API="$AUTOSHAREAPI" >> ./local.properties
     - name: Build with Gradle
       run: ./gradlew build
-    - name: Run tests
-      run: ./gradlew test
+      
+  test:
+  
+      runs-on: ubuntu-latest
+
+      steps:
+      - name: Run unit tests
+        run: ./gradlew test
